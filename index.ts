@@ -12,7 +12,7 @@ export interface JsonArray extends Array<JsonValue> {}
 /**
  * Matches any valid JSON value.
  */
-export type JsonValue = string|number|boolean|null|JsonObject|JsonArray;
+export type JsonValue = string|number|boolean|null|JsonObject|JsonArray|Date;
 
 /**
  * @typedef {Object} Value
@@ -66,7 +66,8 @@ enum Kind {
   Number = 'numberValue',
   String = 'stringValue',
   Bool = 'boolValue',
-  Null = 'nullValue'
+  Null = 'nullValue',
+  Date = 'stringValue'
 }
 
 const toString = Object.prototype.toString;
@@ -77,7 +78,8 @@ const encoders = {
   [typeOf(0)]: v => wrap(Kind.Number, v),
   [typeOf('')]: v => wrap(Kind.String, v),
   [typeOf(true)]: v => wrap(Kind.Bool, v),
-  [typeOf(null)]: () => wrap(Kind.Null, 0)
+  [typeOf(null)]: () => wrap(Kind.Null, 0),
+  [typeOf(new Date())]: v => wrap(Kind.Date, v.toString())
 };
 
 function typeOf(value: JsonValue): string {
